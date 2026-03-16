@@ -77,21 +77,20 @@ export function BatchPanel() {
 
   return (
     <div className="space-y-4">
-      <div className="bg-white/5 rounded-xl p-4 space-y-3">
-        {/* Mode toggle */}
-        <div className="flex items-center bg-white/10 rounded-lg p-1 w-fit">
+      <div className="border border-white/20 p-4 space-y-4">
+        <div className="flex border border-white/20 w-fit">
           <button
             onClick={() => setMode('direct')}
-            className={`px-3 py-1 rounded-md text-xs font-medium transition-all ${
-              mode === 'direct' ? 'bg-white text-gray-900' : 'text-white/60 hover:text-white'
+            className={`px-3 py-1 text-xs font-mono transition-all uppercase tracking-widest ${
+              mode === 'direct' ? 'bg-white text-black' : 'text-white/50 hover:bg-white hover:text-black'
             }`}
           >
             직접 입력
           </button>
           <button
             onClick={() => setMode('slot')}
-            className={`px-3 py-1 rounded-md text-xs font-medium transition-all ${
-              mode === 'slot' ? 'bg-white text-gray-900' : 'text-white/60 hover:text-white'
+            className={`px-3 py-1 text-xs font-mono transition-all uppercase tracking-widest ${
+              mode === 'slot' ? 'bg-white text-black' : 'text-white/50 hover:bg-white hover:text-black'
             }`}
           >
             슬롯 반복
@@ -101,9 +100,9 @@ export function BatchPanel() {
         {mode === 'direct' ? (
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-white/50 text-xs">프롬프트 목록 (줄바꿈으로 구분, 앞 번호 자동 제거)</span>
+              <span className="text-white/40 text-xs font-mono">프롬프트 목록 (줄바꿈으로 구분, 앞 번호 자동 제거)</span>
               {directPromptCount > 0 && (
-                <span className="text-purple-400 text-xs">{directPromptCount}개</span>
+                <span className="text-white/60 text-xs font-mono">{directPromptCount}개</span>
               )}
             </div>
             <textarea
@@ -111,66 +110,52 @@ export function BatchPanel() {
               onChange={(e) => setPromptText(e.target.value)}
               placeholder={`001 Medium shot, a Korean boy...\n003 Wide shot, bright full moon...\n005 Close up, servant face...`}
               rows={8}
-              className="w-full bg-white/10 text-white rounded-lg px-3 py-2 text-xs font-mono
-                focus:outline-none focus:ring-1 focus:ring-purple-500 resize-none
-                placeholder:text-white/20"
+              className="w-full bg-black text-white border border-white/20 px-3 py-2 text-xs font-mono
+                focus:outline-none focus:border-white/60 resize-none placeholder:text-white/20 transition-colors"
             />
           </div>
         ) : (
           <div className="grid grid-cols-2 gap-3">
             <label className="space-y-1">
-              <span className="text-white/50 text-xs">Variations</span>
+              <span className="text-white/40 text-xs font-mono uppercase tracking-widest">Variations</span>
               <input
-                type="number"
-                min={1}
-                max={20}
-                value={count}
+                type="number" min={1} max={20} value={count}
                 onChange={(e) => setCount(Number(e.target.value))}
-                className="w-full bg-white/10 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-purple-500"
+                className="w-full bg-black text-white border border-white/20 px-3 py-2 text-sm font-mono focus:outline-none focus:border-white/60 transition-colors"
               />
             </label>
             <label className="space-y-1">
-              <span className="text-white/50 text-xs">Concurrency</span>
+              <span className="text-white/40 text-xs font-mono uppercase tracking-widest">Concurrency</span>
               <input
-                type="number"
-                min={1}
-                max={5}
-                value={concurrency}
+                type="number" min={1} max={5} value={concurrency}
                 onChange={(e) => setConcurrency(Number(e.target.value))}
-                className="w-full bg-white/10 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-purple-500"
+                className="w-full bg-black text-white border border-white/20 px-3 py-2 text-sm font-mono focus:outline-none focus:border-white/60 transition-colors"
               />
             </label>
           </div>
         )}
 
         {mode === 'direct' && (
-          <label className="flex items-center gap-2">
-            <span className="text-white/50 text-xs">동시 생성</span>
+          <label className="flex items-center gap-3">
+            <span className="text-white/40 text-xs font-mono uppercase tracking-widest">동시 생성</span>
             <input
-              type="number"
-              min={1}
-              max={5}
-              value={concurrency}
+              type="number" min={1} max={5} value={concurrency}
               onChange={(e) => setConcurrency(Number(e.target.value))}
-              className="w-16 bg-white/10 text-white rounded-lg px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-purple-500"
+              className="w-16 bg-black text-white border border-white/20 px-2 py-1 text-xs font-mono focus:outline-none focus:border-white/60 transition-colors"
             />
           </label>
         )}
 
-        {error && <p className="text-red-400 text-xs">{error}</p>}
+        {error && <p className="text-white/50 text-xs font-mono">{error}</p>}
 
         <button
           onClick={submitBatch}
           disabled={loading || (mode === 'direct' && directPromptCount === 0)}
-          className="w-full py-2 rounded-lg font-medium text-sm text-white transition-all
-            bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500
-            disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full py-2 border border-white/20 font-mono font-medium text-sm text-white transition-all
+            hover:bg-white hover:text-black uppercase tracking-widest
+            disabled:opacity-30 disabled:cursor-not-allowed"
         >
-          {loading
-            ? '시작 중...'
-            : mode === 'direct'
-            ? `${directPromptCount}개 프롬프트 생성`
-            : `${count}개 배치 실행`}
+          {loading ? '시작 중...' : mode === 'direct' ? `${directPromptCount}개 프롬프트 생성` : `${count}개 배치 실행`}
         </button>
       </div>
       <BatchQueue />

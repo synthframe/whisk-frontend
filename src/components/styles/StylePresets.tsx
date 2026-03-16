@@ -1,14 +1,14 @@
 import { useGenerateStore } from '../../store/generateStore'
 import type { StylePreset } from '../../types'
 
-const PRESETS: { value: StylePreset; label: string; emoji: string }[] = [
-  { value: 'photorealistic', label: 'Photo', emoji: '📷' },
-  { value: 'cinematic', label: 'Cinematic', emoji: '🎬' },
-  { value: 'anime', label: 'Anime', emoji: '🌸' },
-  { value: 'oil_painting', label: 'Oil Paint', emoji: '🎨' },
-  { value: 'watercolor', label: 'Watercolor', emoji: '💧' },
-  { value: 'pixel_art', label: 'Pixel Art', emoji: '👾' },
-  { value: 'sketched', label: 'Sketch', emoji: '✏️' },
+const PRESETS: { value: StylePreset; label: string }[] = [
+  { value: 'photorealistic', label: 'Photo' },
+  { value: 'cinematic', label: 'Cinematic' },
+  { value: 'anime', label: 'Anime' },
+  { value: 'oil_painting', label: 'Oil Paint' },
+  { value: 'watercolor', label: 'Watercolor' },
+  { value: 'pixel_art', label: 'Pixel Art' },
+  { value: 'sketched', label: 'Sketch' },
 ]
 
 export function StylePresets() {
@@ -20,12 +20,12 @@ export function StylePresets() {
         <button
           key={p.value}
           onClick={() => setPreset(selectedPreset === p.value ? '' : p.value)}
-          className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all
+          className={`px-3 py-1.5 text-xs font-mono font-medium transition-all uppercase tracking-widest border
             ${selectedPreset === p.value
-              ? 'bg-purple-600 text-white shadow-lg shadow-purple-900/50'
-              : 'bg-white/10 text-white/70 hover:bg-white/20'}`}
+              ? 'bg-white text-black border-white'
+              : 'border-white/20 text-white/70 hover:bg-white hover:text-black hover:border-white'}`}
         >
-          {p.emoji} {p.label}
+          {p.label}
         </button>
       ))}
     </div>

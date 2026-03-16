@@ -27,9 +27,7 @@ export function SlotCard({ type }: Props) {
   const inputRef = useRef<HTMLInputElement>(null)
   const [inputMode, setInputMode] = useState<'image' | 'text'>('text')
 
-  const handleFile = (file: File) => {
-    upload(type, file)
-  }
+  const handleFile = (file: File) => upload(type, file)
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault()
@@ -37,34 +35,29 @@ export function SlotCard({ type }: Props) {
     if (file && file.type.startsWith('image/')) handleFile(file)
   }
 
-  const handleClear = () => {
-    clearSlot(type)
-  }
-
   const hasContent = slot.file || slot.prompt
 
   return (
     <div className="flex flex-col gap-2">
-      <div className="flex items-center justify-between">
+      <div className="flex items-start justify-between border-b border-white/10 pb-2">
         <div>
-          <h3 className="font-semibold text-white">{SLOT_LABELS[type]}</h3>
-          <p className="text-xs text-white/50">{SLOT_DESCRIPTIONS[type]}</p>
+          <h3 className="font-mono font-semibold text-white uppercase tracking-widest text-sm">{SLOT_LABELS[type]}</h3>
+          <p className="text-xs text-white/40 font-mono mt-0.5">{SLOT_DESCRIPTIONS[type]}</p>
         </div>
-        <div className="flex items-center gap-2">
-          {/* 이미지/텍스트 모드 토글 */}
-          <div className="flex items-center bg-white/10 rounded-md p-0.5">
+        <div className="flex items-center gap-2 ml-2">
+          <div className="flex border border-white/20">
             <button
               onClick={() => setInputMode('image')}
-              className={`px-2 py-0.5 rounded text-xs font-medium transition-all ${
-                inputMode === 'image' ? 'bg-white text-gray-900' : 'text-white/60 hover:text-white'
+              className={`px-2 py-0.5 text-xs font-mono transition-all uppercase tracking-widest ${
+                inputMode === 'image' ? 'bg-white text-black' : 'text-white/50 hover:bg-white hover:text-black'
               }`}
             >
               이미지
             </button>
             <button
               onClick={() => setInputMode('text')}
-              className={`px-2 py-0.5 rounded text-xs font-medium transition-all ${
-                inputMode === 'text' ? 'bg-white text-gray-900' : 'text-white/60 hover:text-white'
+              className={`px-2 py-0.5 text-xs font-mono transition-all uppercase tracking-widest ${
+                inputMode === 'text' ? 'bg-white text-black' : 'text-white/50 hover:bg-white hover:text-black'
               }`}
             >
               텍스트
@@ -72,8 +65,8 @@ export function SlotCard({ type }: Props) {
           </div>
           {hasContent && (
             <button
-              onClick={handleClear}
-              className="text-white/40 hover:text-white/80 text-xs transition-colors"
+              onClick={() => clearSlot(type)}
+              className="text-white/30 hover:text-white text-xs transition-colors font-mono"
             >
               Clear
             </button>
@@ -84,8 +77,8 @@ export function SlotCard({ type }: Props) {
       {inputMode === 'image' ? (
         <>
           <div
-            className={`relative aspect-square rounded-xl border-2 border-dashed transition-all cursor-pointer overflow-hidden
-              ${slot.preview ? 'border-transparent' : 'border-white/20 hover:border-white/40 bg-white/5'}`}
+            className={`relative aspect-square border border-dashed transition-all cursor-pointer overflow-hidden
+              ${slot.preview ? 'border-white/20' : 'border-white/20 hover:border-white/60'}`}
             onClick={() => !slot.preview && inputRef.current?.click()}
             onDrop={handleDrop}
             onDragOver={(e) => e.preventDefault()}
@@ -94,37 +87,31 @@ export function SlotCard({ type }: Props) {
               <>
                 <img src={slot.preview} alt={type} className="w-full h-full object-cover" />
                 <div
-                  className="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"
+                  className="absolute inset-0 bg-black/50 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"
                   onClick={() => inputRef.current?.click()}
                 >
-                  <span className="text-white text-sm">Change</span>
+                  <span className="text-white text-xs font-mono uppercase tracking-widest border border-white/40 px-3 py-1">Change</span>
                 </div>
               </>
             ) : (
               <div className="flex flex-col items-center justify-center h-full gap-2 p-4">
-                <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
-                  <svg className="w-5 h-5 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div className="w-10 h-10 border border-white/20 flex items-center justify-center">
+                  <svg className="w-5 h-5 text-white/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                   </svg>
                 </div>
-                <span className="text-white/50 text-xs text-center">Drop image or click to upload</span>
+                <span className="text-white/40 text-xs text-center font-mono">Drop image or click to upload</span>
               </div>
             )}
-
             {slot.analyzing && (
-              <div className="absolute inset-0 bg-black/60 flex items-center justify-center gap-2">
+              <div className="absolute inset-0 bg-black/70 flex items-center justify-center gap-2">
                 <LoadingSpinner size="sm" />
-                <span className="text-white text-sm">Analyzing...</span>
+                <span className="text-white text-xs font-mono uppercase tracking-widest">Analyzing...</span>
               </div>
             )}
           </div>
-
-          {slot.prompt && (
-            <p className="text-xs text-white/60 italic line-clamp-3">{slot.prompt}</p>
-          )}
-          {slot.error && (
-            <p className="text-xs text-red-400">{slot.error}</p>
-          )}
+          {slot.prompt && <p className="text-xs text-white/50 italic line-clamp-3 font-mono">{slot.prompt}</p>}
+          {slot.error && <p className="text-xs text-white/40 font-mono">{slot.error}</p>}
         </>
       ) : (
         <textarea
@@ -132,9 +119,9 @@ export function SlotCard({ type }: Props) {
           onChange={(e) => setSlot(type, { prompt: e.target.value })}
           placeholder={`${SLOT_DESCRIPTIONS[type]}를 텍스트로 입력하세요`}
           rows={5}
-          className="w-full bg-white/10 text-white rounded-xl px-3 py-2 text-xs font-mono
-            focus:outline-none focus:ring-1 focus:ring-purple-500 resize-none
-            placeholder:text-white/20"
+          className="w-full bg-black text-white border border-white/20 px-3 py-2 text-xs font-mono
+            focus:outline-none focus:border-white/60 resize-none
+            placeholder:text-white/20 transition-colors"
         />
       )}
 

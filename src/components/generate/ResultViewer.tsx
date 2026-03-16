@@ -7,36 +7,36 @@ export function ResultViewer() {
 
   if (!generating && !resultImageUrl && !error) {
     return (
-      <div className="aspect-square rounded-xl border-2 border-dashed border-white/10 flex items-center justify-center">
-        <p className="text-white/30 text-sm">Generated image will appear here</p>
+      <div className="aspect-square border border-dashed border-white/20 flex items-center justify-center">
+        <p className="text-white/30 text-xs font-mono uppercase tracking-widest">Generated image will appear here</p>
       </div>
     )
   }
 
   if (generating) {
     return (
-      <div className="aspect-square rounded-xl border-2 border-dashed border-white/10 flex flex-col items-center justify-center gap-3">
+      <div className="aspect-square border border-dashed border-white/20 flex flex-col items-center justify-center gap-3">
         <LoadingSpinner size="lg" />
-        <p className="text-white/50 text-sm">Creating your image...</p>
+        <p className="text-white/50 text-xs font-mono uppercase tracking-widest">Creating your image...</p>
       </div>
     )
   }
 
   if (error) {
     return (
-      <div className="aspect-square rounded-xl border-2 border-dashed border-red-500/30 flex items-center justify-center p-4">
-        <p className="text-red-400 text-sm text-center">{error}</p>
+      <div className="aspect-square border border-dashed border-white/20 flex items-center justify-center p-4">
+        <p className="text-white/60 text-sm text-center font-mono">{error}</p>
       </div>
     )
   }
 
   return (
-    <div className="relative rounded-xl overflow-hidden aspect-square">
+    <div className="relative overflow-hidden aspect-square border border-white/20">
       <img src={`${outputBaseURL}${resultImageUrl}`} alt="Generated" className="w-full h-full object-cover" />
       <a
         href={`${outputBaseURL}${resultImageUrl}`}
         download
-        className="absolute bottom-3 right-3 bg-black/60 hover:bg-black/80 text-white text-xs px-3 py-1.5 rounded-lg transition-colors"
+        className="absolute bottom-3 right-3 border border-white/20 bg-black text-white text-xs px-3 py-1.5 font-mono uppercase tracking-widest transition-all hover:bg-white hover:text-black"
       >
         Download
       </a>
