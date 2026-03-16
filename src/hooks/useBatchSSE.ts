@@ -14,11 +14,14 @@ async function downloadAllAsZip(imageUrls: string[], batchId: string) {
     })
   )
   const content = await zip.generateAsync({ type: 'blob' })
+  const url = URL.createObjectURL(content)
   const a = document.createElement('a')
-  a.href = URL.createObjectURL(content)
+  a.href = url
   a.download = `batch_${batchId.slice(0, 8)}.zip`
+  document.body.appendChild(a)
   a.click()
-  URL.revokeObjectURL(a.href)
+  document.body.removeChild(a)
+  setTimeout(() => URL.revokeObjectURL(url), 1000)
 }
 
 export function useBatchSSE(batchId: string | null) {
