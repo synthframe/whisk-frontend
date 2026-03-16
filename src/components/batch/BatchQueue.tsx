@@ -16,11 +16,11 @@ function BatchQueueItem({ batchId }: Props) {
   const failed = job.results.filter((r) => r.status === 'failed').length
 
   return (
-    <div className="border border-black/20 p-4 space-y-3">
-      <div className="flex items-center justify-between border-b border-black/10 pb-3">
-        <span className="text-xs text-black/40 font-mono tracking-widest">{batchId.slice(0, 8)}...</span>
-        <span className={`text-xs px-2 py-0.5 border font-mono uppercase tracking-widest ${
-          job.status === 'completed' ? 'border-black/40 text-black' : 'border-black/20 text-black/50'
+    <div className="border-2 border-black p-5 space-y-4">
+      <div className="flex items-center justify-between border-b-2 border-black pb-4">
+        <span className="text-sm text-black/50 font-mono tracking-widest font-bold">{batchId.slice(0, 8)}...</span>
+        <span className={`text-xs px-3 py-1 border-2 font-mono uppercase tracking-widest font-bold ${
+          job.status === 'completed' ? 'bg-black text-white border-black' : 'border-black text-black'
         }`}>
           {job.status}
         </span>
@@ -39,11 +39,11 @@ export function BatchQueue() {
   const jobs = useBatchStore((s) => s.jobs)
 
   if (jobs.length === 0) {
-    return <p className="text-black/30 text-xs text-center py-8 font-mono uppercase tracking-widest">No batch jobs yet</p>
+    return <p className="text-black/40 text-sm text-center py-10 font-mono uppercase tracking-widest font-bold">No batch jobs yet</p>
   }
 
   return (
-    <div className="space-y-3 max-h-96 overflow-y-auto">
+    <div className="space-y-4 max-h-[32rem] overflow-y-auto">
       {jobs.map((j) => (
         <BatchQueueItem key={j.batchId} batchId={j.batchId} />
       ))}

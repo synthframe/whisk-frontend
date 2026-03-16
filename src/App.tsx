@@ -15,20 +15,20 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-white text-black">
-      <header className="border-b border-black/20 px-6 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 border border-black/20 flex items-center justify-center">
-            <span className="text-black font-bold text-sm font-mono">W</span>
+      <header className="border-b-2 border-black px-8 py-5 flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <div className="w-9 h-9 border-2 border-black flex items-center justify-center">
+            <span className="text-black font-bold text-base font-mono">W</span>
           </div>
-          <h1 className="text-lg font-bold text-black font-mono tracking-widest uppercase">Whisk Clone</h1>
+          <h1 className="text-xl font-bold text-black font-mono tracking-widest uppercase">Whisk Clone</h1>
         </div>
-        <div className="flex items-center border border-black/20 p-1">
+        <div className="flex border-2 border-black">
           {(['single', 'batch'] as Mode[]).map((m) => (
             <button
               key={m}
               onClick={() => setMode(m)}
-              className={`px-4 py-1.5 text-sm font-mono font-medium transition-all tracking-widest uppercase
-                ${mode === m ? 'bg-black text-black' : 'text-black/60 hover:bg-white hover:text-black'}`}
+              className={`px-6 py-2 text-sm font-mono font-bold transition-all tracking-widest uppercase
+                ${mode === m ? 'bg-black text-white' : 'text-black hover:bg-black hover:text-white'}`}
             >
               {m === 'single' ? 'Single' : 'Batch'}
             </button>
@@ -36,26 +36,26 @@ export default function App() {
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-6 py-8">
-        <section className="mb-8">
-          <h2 className="text-xs font-mono text-black/50 uppercase tracking-widest mb-4">Compose Your Image</h2>
+      <main className="max-w-5xl mx-auto px-8 py-10">
+        <section className="mb-10">
+          <h2 className="text-sm font-mono font-bold text-black/60 uppercase tracking-widest mb-6">Compose Your Image</h2>
           <SlotGrid />
         </section>
 
-        <div className="border-t border-black/10 mb-8" />
+        <div className="border-t-2 border-black mb-10" />
 
-        <section className="mb-8">
-          <h2 className="text-xs font-mono text-black/50 uppercase tracking-widest mb-4">Style Preset</h2>
+        <section className="mb-10">
+          <h2 className="text-sm font-mono font-bold text-black/60 uppercase tracking-widest mb-6">Style Preset</h2>
           <StylePresets />
         </section>
 
-        <div className="border-t border-black/10 mb-8" />
+        <div className="border-t-2 border-black mb-10" />
 
         {mode === 'single' ? (
-          <div className="grid grid-cols-2 gap-6">
+          <div className="grid grid-cols-2 gap-8">
             <div className="space-y-4">
               <GenerateButton />
-              <p className="text-black/20 text-xs text-center font-mono">Cloudflare Workers AI · SDXL-Lightning</p>
+              <p className="text-black/40 text-xs text-center font-mono tracking-wider">Cloudflare Workers AI · SDXL-Lightning</p>
             </div>
             <ResultViewer />
           </div>

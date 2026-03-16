@@ -10,10 +10,10 @@ export function GenerateButton() {
     <button
       onClick={generate}
       disabled={generating}
-      className="w-full py-3 border border-black/20 font-mono font-semibold text-black transition-all
-        hover:bg-white hover:text-black
-        disabled:opacity-50 disabled:cursor-not-allowed
-        flex items-center justify-center gap-2 uppercase tracking-widest text-sm"
+      className="w-full py-4 border-2 border-black font-mono font-bold text-black transition-all
+        hover:bg-black hover:text-white text-base uppercase tracking-widest
+        disabled:opacity-40 disabled:cursor-not-allowed
+        flex items-center justify-center gap-3"
     >
       {generating ? (
         <>
