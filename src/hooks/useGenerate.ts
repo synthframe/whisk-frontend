@@ -1,6 +1,14 @@
 import { useSlotStore } from '../store/slotStore'
 import { useGenerateStore } from '../store/generateStore'
 import { generateImage, pollGenerateStatus } from '../api/generate'
+import { outputBaseURL } from '../api/client'
+
+function autoDownload(imageUrl: string, filename: string) {
+  const a = document.createElement('a')
+  a.href = `${outputBaseURL}${imageUrl}`
+  a.download = filename
+  a.click()
+}
 
 export function useGenerate() {
   const slots = useSlotStore((s) => s.slots)
@@ -26,6 +34,7 @@ export function useGenerate() {
         if (status.status === 'completed' && status.image_url) {
           setResult(status.image_url)
           setGenerating(false)
+          autoDownload(status.image_url, `whisk_${res.id.slice(0, 8)}.png`)
         } else if (status.status === 'failed') {
           setError(status.error ?? 'Generation failed')
           setGenerating(false)

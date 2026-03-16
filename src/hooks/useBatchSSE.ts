@@ -3,6 +3,13 @@ import { useBatchStore } from '../store/batchStore'
 import { outputBaseURL } from '../api/client'
 import type { SSEEvent, BatchJobResult } from '../types'
 
+function autoDownload(imageUrl: string, filename: string) {
+  const a = document.createElement('a')
+  a.href = `${outputBaseURL}${imageUrl}`
+  a.download = filename
+  a.click()
+}
+
 export function useBatchSSE(batchId: string | null) {
   const updateJob = useBatchStore((s) => s.updateJob)
   const appendEvent = useBatchStore((s) => s.appendEvent)
@@ -26,6 +33,7 @@ export function useBatchSSE(batchId: string | null) {
                 : r
             ) ?? [],
           })
+          autoDownload(payload.image_url, `batch_${batchId.slice(0, 8)}_${payload.index + 1}.png`)
         } else if (event.type === 'job_failed') {
           const payload = event.payload as { index: number; error: string }
           updateJob(batchId, {
