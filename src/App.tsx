@@ -71,12 +71,38 @@ export default function App() {
         )}
 
         {mode === 'batch' && (
-          <div className="space-y-6">
+          <div className="space-y-4">
             {/* Slots — editable, same as single mode */}
             <SlotGrid />
 
+            {/* Controls card: style + ratio — same as single mode */}
+            <div className="bg-[#141418] rounded-2xl border border-white/[0.08] divide-y divide-white/[0.06]">
+              <div className="p-4">
+                <p className="text-[11px] font-semibold text-slate-600 uppercase tracking-widest mb-3">스타일</p>
+                <StylePresets />
+              </div>
+              <div className="p-4">
+                <p className="text-[11px] font-semibold text-slate-600 uppercase tracking-widest mb-3">비율</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {RATIOS.map((r) => (
+                    <button
+                      key={r}
+                      onClick={() => setRatio(r)}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${
+                        selectedRatio === r
+                          ? 'bg-violet-600/20 text-violet-300 border-violet-500/50'
+                          : 'bg-transparent text-slate-500 border-white/[0.08] hover:border-white/[0.18] hover:text-slate-300'
+                      }`}
+                    >
+                      {r}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
             {/* Batch controls + queue */}
-            <div className="flex flex-col lg:grid lg:grid-cols-[360px_1fr] gap-6">
+            <div className="flex flex-col lg:grid lg:grid-cols-[360px_1fr] gap-8">
               <div>
                 <BatchPanel />
               </div>
