@@ -24,61 +24,58 @@ export default function App() {
     <div className="min-h-screen bg-[#0c0c0f]">
       <Navbar mode={mode} onModeChange={setMode} />
 
-      <main className="max-w-6xl mx-auto px-4 md:px-6 py-6 md:py-8">
+      <main className="max-w-6xl mx-auto px-4 md:px-6 py-8">
         {mode === 'single' && (
-          <div className="flex flex-col md:grid md:grid-cols-5 gap-6">
-            {/* Left panel */}
-            <div className="md:col-span-3 space-y-4">
-              <section>
-                <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-widest mb-3">입력 슬롯</h2>
-                <div className="overflow-x-auto md:overflow-visible">
-                  <SlotGrid />
-                </div>
-              </section>
+          <div className="flex flex-col lg:grid lg:grid-cols-[1fr_400px] gap-8">
+            {/* Left: input flow */}
+            <div className="space-y-4">
+              <SlotGrid />
 
-              <section className="bg-[#141418] rounded-2xl border border-white/[0.08] p-4">
-                <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-widest mb-3">스타일 프리셋</h2>
-                <StylePresets />
-              </section>
-
-              <section className="bg-[#141418] rounded-2xl border border-white/[0.08] p-4">
-                <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-widest mb-3">화면 비율</h2>
-                <div className="flex flex-wrap gap-1.5">
-                  {RATIOS.map((r) => (
-                    <button
-                      key={r}
-                      onClick={() => setRatio(r)}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${
-                        selectedRatio === r
-                          ? 'bg-violet-600/20 text-violet-300 border-violet-500/50'
-                          : 'bg-transparent text-slate-500 border-white/[0.08] hover:border-white/[0.18] hover:text-slate-300'
-                      }`}
-                    >
-                      {r}
-                    </button>
-                  ))}
+              {/* Controls card: style + ratio combined */}
+              <div className="bg-[#141418] rounded-2xl border border-white/[0.08] divide-y divide-white/[0.06]">
+                {/* Style presets */}
+                <div className="p-4">
+                  <p className="text-[11px] font-semibold text-slate-600 uppercase tracking-widest mb-3">스타일</p>
+                  <StylePresets />
                 </div>
-              </section>
+
+                {/* Aspect ratio */}
+                <div className="p-4">
+                  <p className="text-[11px] font-semibold text-slate-600 uppercase tracking-widest mb-3">비율</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {RATIOS.map((r) => (
+                      <button
+                        key={r}
+                        onClick={() => setRatio(r)}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${
+                          selectedRatio === r
+                            ? 'bg-violet-600/20 text-violet-300 border-violet-500/50'
+                            : 'bg-transparent text-slate-500 border-white/[0.08] hover:border-white/[0.18] hover:text-slate-300'
+                        }`}
+                      >
+                        {r}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
 
               <GenerateButton />
             </div>
 
-            {/* Right panel */}
-            <div className="md:col-span-2">
-              <h2 className="text-xs font-semibold text-slate-600 uppercase tracking-widest mb-3">결과</h2>
-              <div className="md:sticky md:top-20">
-                <ResultViewer />
-              </div>
+            {/* Right: result — sticky, fills available height */}
+            <div className="lg:sticky lg:top-20 lg:self-start">
+              <ResultViewer />
             </div>
           </div>
         )}
 
         {mode === 'batch' && (
-          <div className="flex flex-col md:grid md:grid-cols-5 gap-6">
-            <div className="md:col-span-2">
+          <div className="flex flex-col lg:grid lg:grid-cols-[360px_1fr] gap-8">
+            <div>
               <BatchPanel />
             </div>
-            <div className="md:col-span-3">
+            <div>
               {jobs.length > 0 ? (
                 <BatchQueue />
               ) : (

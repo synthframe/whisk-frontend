@@ -30,7 +30,7 @@ export function ResultViewer() {
 
   if (!generating && !resultImageUrl && !error) {
     return (
-      <div className="aspect-square rounded-2xl bg-[#141418] border border-white/[0.08] flex flex-col items-center justify-center gap-3">
+      <div className="min-h-[300px] lg:min-h-[440px] rounded-2xl bg-[#141418] border border-white/[0.08] flex flex-col items-center justify-center gap-3">
         <div className="w-14 h-14 rounded-2xl bg-[#1c1c23] flex items-center justify-center">
           <ImageIcon className="w-7 h-7 text-slate-700" />
         </div>
@@ -44,7 +44,7 @@ export function ResultViewer() {
 
   if (generating) {
     return (
-      <div className="aspect-square rounded-2xl bg-[#141418] border border-violet-500/20 flex flex-col items-center justify-center gap-4">
+      <div className="min-h-[300px] lg:min-h-[440px] rounded-2xl bg-[#141418] border border-violet-500/20 flex flex-col items-center justify-center gap-4">
         <div className="relative w-12 h-12">
           <div className="w-12 h-12 rounded-full border-2 border-violet-500/20 border-t-violet-500 animate-spin" />
           <div className="absolute inset-2 rounded-full bg-violet-500/10 animate-pulse" />
@@ -59,7 +59,7 @@ export function ResultViewer() {
 
   if (error) {
     return (
-      <div className="aspect-square rounded-2xl bg-[#141418] border border-red-500/20 flex flex-col items-center justify-center p-6 gap-3">
+      <div className="min-h-[300px] lg:min-h-[440px] rounded-2xl bg-[#141418] border border-red-500/20 flex flex-col items-center justify-center p-6 gap-3">
         <div className="w-12 h-12 rounded-full bg-red-500/10 flex items-center justify-center">
           <svg className="w-6 h-6 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
