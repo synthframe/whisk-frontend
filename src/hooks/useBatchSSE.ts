@@ -1,11 +1,13 @@
 import { useEffect } from 'react'
 import { useBatchStore } from '../store/batchStore'
+import { useToastStore } from '../store/toastStore'
 import { outputBaseURL } from '../api/client'
 import type { SSEEvent, BatchJobResult } from '../types'
 
 export function useBatchSSE(batchId: string | null) {
   const updateJob = useBatchStore((s) => s.updateJob)
   const appendEvent = useBatchStore((s) => s.appendEvent)
+  const addToast = useToastStore((s) => s.addToast)
 
   useEffect(() => {
     if (!batchId) return
@@ -44,6 +46,7 @@ export function useBatchSSE(batchId: string | null) {
           })
         } else if (event.type === 'batch_completed') {
           updateJob(batchId, { status: 'completed' })
+          addToast('배치 완료!', 'success')
           es.close()
         }
       } catch {
@@ -56,5 +59,5 @@ export function useBatchSSE(batchId: string | null) {
     }
 
     return () => es.close()
-  }, [batchId, updateJob, appendEvent])
+  }, [batchId, updateJob, appendEvent, addToast])
 }

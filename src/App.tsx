@@ -6,15 +6,17 @@ import { GenerateButton } from './components/generate/GenerateButton'
 import { ResultViewer } from './components/generate/ResultViewer'
 import { BatchPanel } from './components/batch/BatchPanel'
 import { BatchQueue } from './components/batch/BatchQueue'
-import { ErrorToast } from './components/shared/ErrorToast'
+import { GalleryPanel } from './components/gallery/GalleryPanel'
+import { ToastContainer } from './components/shared/Toast'
 import { useGenerateStore } from './store/generateStore'
 import { useBatchStore } from './store/batchStore'
+import { Layers } from 'lucide-react'
 import type { AspectRatio } from './types'
 
 const RATIOS: AspectRatio[] = ['1:1', '16:9', '9:16', '4:3', '3:4']
 
 export default function App() {
-  const [mode, setMode] = useState<'single' | 'batch'>('single')
+  const [mode, setMode] = useState<'single' | 'batch' | 'gallery'>('single')
   const { selectedRatio, setRatio } = useGenerateStore()
   const { jobs } = useBatchStore()
 
@@ -22,14 +24,16 @@ export default function App() {
     <div className="min-h-screen bg-gray-50">
       <Navbar mode={mode} onModeChange={setMode} />
 
-      <main className="max-w-6xl mx-auto px-6 py-8">
-        {mode === 'single' ? (
-          <div className="grid grid-cols-5 gap-6">
+      <main className="max-w-6xl mx-auto px-4 md:px-6 py-6 md:py-8">
+        {mode === 'single' && (
+          <div className="flex flex-col md:grid md:grid-cols-5 gap-6">
             {/* Left panel */}
-            <div className="col-span-3 space-y-5">
+            <div className="md:col-span-3 space-y-5">
               <section>
                 <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">입력 슬롯</h2>
-                <SlotGrid />
+                <div className="overflow-x-auto md:overflow-visible">
+                  <SlotGrid />
+                </div>
               </section>
 
               <section className="bg-white rounded-xl border border-gray-100 shadow-sm p-4">
@@ -39,7 +43,7 @@ export default function App() {
 
               <section className="bg-white rounded-xl border border-gray-100 shadow-sm p-4">
                 <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">화면 비율</h2>
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2">
                   {RATIOS.map((r) => (
                     <button
                       key={r}
@@ -60,30 +64,42 @@ export default function App() {
             </div>
 
             {/* Right panel */}
-            <div className="col-span-2">
+            <div className="md:col-span-2">
               <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">결과</h2>
               <ResultViewer />
             </div>
           </div>
-        ) : (
-          <div className="grid grid-cols-5 gap-6">
-            <div className="col-span-2">
+        )}
+
+        {mode === 'batch' && (
+          <div className="flex flex-col md:grid md:grid-cols-5 gap-6">
+            <div className="md:col-span-2">
               <BatchPanel />
             </div>
-            <div className="col-span-3">
+            <div className="md:col-span-3">
               {jobs.length > 0 ? (
                 <BatchQueue />
               ) : (
-                <div className="h-64 rounded-xl bg-white border border-gray-100 flex items-center justify-center">
-                  <p className="text-sm text-gray-400">배치 작업이 여기에 표시됩니다</p>
+                <div className="h-64 rounded-xl bg-white border border-gray-100 flex flex-col items-center justify-center gap-3">
+                  <div className="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center">
+                    <Layers className="w-6 h-6 text-gray-300" />
+                  </div>
+                  <div className="text-center">
+                    <p className="text-sm font-medium text-gray-500">배치 작업이 여기에 표시됩니다</p>
+                    <p className="text-xs text-gray-400 mt-1">좌측에서 배치를 시작하세요</p>
+                  </div>
                 </div>
               )}
             </div>
           </div>
         )}
+
+        {mode === 'gallery' && (
+          <GalleryPanel />
+        )}
       </main>
 
-      <ErrorToast />
+      <ToastContainer />
     </div>
   )
 }

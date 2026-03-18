@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import { Upload, Type, X, Loader2, ImageIcon } from 'lucide-react'
+import { Upload, Type, X, ImageIcon } from 'lucide-react'
 import type { SlotType } from '../../types'
 import { useSlotStore } from '../../store/slotStore'
 import { useSlotUpload } from '../../hooks/useSlotUpload'
@@ -71,14 +71,24 @@ export function SlotCard({ type, inputMode, onModeChange }: Props) {
             {slot.preview ? (
               <>
                 <img src={slot.preview} alt="" className="w-full h-full object-cover" />
+
+                {/* Skeleton analyzing overlay */}
                 {slot.analyzing && (
-                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                    <Loader2 className="w-6 h-6 text-white animate-spin" />
+                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-2">
+                    {/* Pulsing skeleton stripes */}
+                    <div className="absolute inset-0 bg-black/50" />
+                    <div className="relative z-10 flex flex-col items-center gap-2 w-3/4">
+                      <div className="w-full h-2 rounded-full bg-white/30 animate-pulse" />
+                      <div className="w-4/5 h-2 rounded-full bg-white/30 animate-pulse delay-75" />
+                      <div className="w-3/5 h-2 rounded-full bg-white/30 animate-pulse delay-150" />
+                      <p className="text-xs text-white/80 mt-1 font-medium">분석 중...</p>
+                    </div>
                   </div>
                 )}
+
                 <button
                   onClick={(e) => { e.stopPropagation(); clearSlot(type) }}
-                  className="absolute top-2 right-2 w-6 h-6 bg-black/60 hover:bg-black/80 rounded-full flex items-center justify-center transition-colors"
+                  className="absolute top-2 right-2 w-6 h-6 bg-black/60 hover:bg-black/80 rounded-full flex items-center justify-center transition-colors z-20"
                 >
                   <X className="w-3 h-3 text-white" />
                 </button>

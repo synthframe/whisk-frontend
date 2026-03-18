@@ -1,11 +1,13 @@
 import { useSlotStore } from '../store/slotStore'
 import { useGenerateStore } from '../store/generateStore'
+import { useToastStore } from '../store/toastStore'
 import { generateImage, pollGenerateStatus } from '../api/generate'
 import { RATIO_DIMENSIONS } from '../types'
 
 export function useGenerate() {
   const slots = useSlotStore((s) => s.slots)
   const { selectedPreset, selectedRatio, setGenerating, setResult, setError, setJobId } = useGenerateStore()
+  const addToast = useToastStore((s) => s.addToast)
 
   const generate = async () => {
     setGenerating(true)
@@ -29,9 +31,12 @@ export function useGenerate() {
         if (status.status === 'completed' && status.image_url) {
           setResult(status.image_url)
           setGenerating(false)
+          addToast('이미지 생성 완료!', 'success')
         } else if (status.status === 'failed') {
-          setError(status.error ?? 'Generation failed')
+          const errMsg = status.error ?? 'Generation failed'
+          setError(errMsg)
           setGenerating(false)
+          addToast(errMsg, 'error')
         } else {
           setTimeout(poll, 2000)
         }
@@ -41,6 +46,7 @@ export function useGenerate() {
       const msg = e instanceof Error ? e.message : 'Generation failed'
       setError(msg)
       setGenerating(false)
+      addToast(msg, 'error')
     }
   }
 
