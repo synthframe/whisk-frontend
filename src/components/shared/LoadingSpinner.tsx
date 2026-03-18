@@ -1,6 +1,11 @@
-export function LoadingSpinner({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
-  const cls = size === 'sm' ? 'w-5 h-5' : size === 'lg' ? 'w-12 h-12' : 'w-8 h-8'
+interface Props {
+  size?: 'sm' | 'md' | 'lg'
+}
+
+const sizeMap = { sm: 'w-4 h-4', md: 'w-6 h-6', lg: 'w-8 h-8' }
+
+export function LoadingSpinner({ size = 'md' }: Props) {
   return (
-    <div className={`${cls} border-2 border-black/30 border-t-black animate-spin`} />
+    <div className={`${sizeMap[size]} rounded-full border-2 border-indigo-200 border-t-indigo-600 animate-spin`} />
   )
 }

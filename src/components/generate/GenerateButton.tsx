@@ -1,6 +1,6 @@
+import { Wand2 } from 'lucide-react'
 import { useGenerateStore } from '../../store/generateStore'
 import { useGenerate } from '../../hooks/useGenerate'
-import { LoadingSpinner } from '../shared/LoadingSpinner'
 
 export function GenerateButton() {
   const { generating } = useGenerateStore()
@@ -10,24 +10,10 @@ export function GenerateButton() {
     <button
       onClick={generate}
       disabled={generating}
-      className="w-full py-4 border-2 border-black font-mono font-bold text-black transition-all
-        hover:bg-black hover:text-white text-base uppercase tracking-widest
-        disabled:opacity-40 disabled:cursor-not-allowed
-        flex items-center justify-center gap-3"
+      className="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl text-sm transition-colors shadow-sm"
     >
-      {generating ? (
-        <>
-          <LoadingSpinner size="sm" />
-          Generating...
-        </>
-      ) : (
-        <>
-          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-          </svg>
-          Generate
-        </>
-      )}
+      <Wand2 className="w-4 h-4" />
+      {generating ? '생성 중...' : '이미지 생성'}
     </button>
   )
 }

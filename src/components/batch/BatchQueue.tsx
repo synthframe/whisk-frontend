@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Archive } from 'lucide-react'
 import JSZip from 'jszip'
 import { useBatchStore } from '../../store/batchStore'
 import { useBatchSSE } from '../../hooks/useBatchSSE'
@@ -51,23 +52,27 @@ function BatchQueueItem({ batchId }: Props) {
     setDownloading(false)
   }
 
+  const statusCls =
+    job.status === 'completed' ? 'bg-emerald-50 text-emerald-700' :
+    job.status === 'running' ? 'bg-indigo-50 text-indigo-700' :
+    'bg-gray-50 text-gray-500'
+
   return (
-    <div className="border-2 border-black p-5 space-y-4">
-      <div className="flex items-center justify-between border-b-2 border-black pb-4">
-        <span className="text-sm text-black/50 font-mono tracking-widest font-bold">{batchId.slice(0, 8)}...</span>
-        <div className="flex items-center gap-3">
+    <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-4 space-y-4">
+      <div className="flex items-center justify-between">
+        <span className="text-xs text-gray-400 font-mono">{batchId.slice(0, 8)}...</span>
+        <div className="flex items-center gap-2">
           {job.status === 'completed' && completedUrls.length > 0 && (
             <button
               onClick={handleDownloadAll}
               disabled={downloading}
-              className="text-xs px-3 py-1 border-2 border-black font-mono uppercase tracking-widest font-bold transition-all hover:bg-black hover:text-white disabled:opacity-40"
+              className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border border-gray-200 text-gray-600 hover:border-indigo-300 hover:text-indigo-600 transition-colors disabled:opacity-40 font-medium"
             >
+              <Archive className="w-3.5 h-3.5" />
               {downloading ? '...' : `ZIP (${completedUrls.length})`}
             </button>
           )}
-          <span className={`text-xs px-3 py-1 border-2 font-mono uppercase tracking-widest font-bold ${
-            job.status === 'completed' ? 'bg-black text-white border-black' : 'border-black text-black'
-          }`}>
+          <span className={`text-xs font-medium px-2.5 py-1 rounded-lg ${statusCls}`}>
             {job.status}
           </span>
         </div>
@@ -86,7 +91,11 @@ export function BatchQueue() {
   const jobs = useBatchStore((s) => s.jobs)
 
   if (jobs.length === 0) {
-    return <p className="text-black/40 text-sm text-center py-10 font-mono uppercase tracking-widest font-bold">No batch jobs yet</p>
+    return (
+      <div className="h-64 rounded-xl bg-white border border-gray-100 flex items-center justify-center">
+        <p className="text-sm text-gray-400">배치 작업이 여기에 표시됩니다</p>
+      </div>
+    )
   }
 
   return (

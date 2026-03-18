@@ -1,9 +1,9 @@
 import { useState } from 'react'
+import { ListPlus, Repeat, Play, Settings, AlertCircle } from 'lucide-react'
 import { useSlotStore } from '../../store/slotStore'
 import { useGenerateStore } from '../../store/generateStore'
 import { useBatchStore } from '../../store/batchStore'
 import { createBatch } from '../../api/batch'
-import { BatchQueue } from './BatchQueue'
 import { RATIO_DIMENSIONS } from '../../types'
 import type { BatchJobInput, BatchJobResult } from '../../types'
 
@@ -79,89 +79,91 @@ export function BatchPanel() {
   const directPromptCount = parsePrompts(promptText).length
 
   return (
-    <div className="space-y-6">
-      <div className="border-2 border-black p-6 space-y-5">
-        <div className="flex border-2 border-black w-fit">
+    <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 space-y-5">
+      <div>
+        <h2 className="text-sm font-semibold text-gray-900 mb-3">배치 모드</h2>
+        <div className="flex gap-2">
           <button
             onClick={() => setMode('direct')}
-            className={`px-4 py-2 text-sm font-mono font-bold transition-all uppercase tracking-widest ${
-              mode === 'direct' ? 'bg-black text-white' : 'text-black hover:bg-black hover:text-white'
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium border transition-all ${
+              mode === 'direct'
+                ? 'bg-indigo-600 text-white border-indigo-600'
+                : 'bg-white text-gray-600 border-gray-200 hover:border-indigo-300 hover:text-indigo-600'
             }`}
           >
+            <ListPlus className="w-4 h-4" />
             직접 입력
           </button>
           <button
             onClick={() => setMode('slot')}
-            className={`px-4 py-2 text-sm font-mono font-bold transition-all uppercase tracking-widest ${
-              mode === 'slot' ? 'bg-black text-white' : 'text-black hover:bg-black hover:text-white'
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium border transition-all ${
+              mode === 'slot'
+                ? 'bg-indigo-600 text-white border-indigo-600'
+                : 'bg-white text-gray-600 border-gray-200 hover:border-indigo-300 hover:text-indigo-600'
             }`}
           >
+            <Repeat className="w-4 h-4" />
             슬롯 반복
           </button>
         </div>
+      </div>
 
-        {mode === 'direct' ? (
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-black/60 text-sm font-mono font-bold">프롬프트 목록 (줄바꿈으로 구분, 앞 번호 자동 제거)</span>
-              {directPromptCount > 0 && (
-                <span className="text-black font-mono font-bold text-sm">{directPromptCount}개</span>
-              )}
-            </div>
-            <textarea
-              value={promptText}
-              onChange={(e) => setPromptText(e.target.value)}
-              placeholder={`001 Medium shot, a Korean boy...\n003 Wide shot, bright full moon...\n005 Close up, servant face...`}
-              rows={8}
-              className="w-full bg-white text-black border-2 border-black px-4 py-3 text-sm font-mono
-                focus:outline-none resize-none placeholder:text-black/30 transition-colors"
-            />
+      {mode === 'direct' ? (
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <label className="text-xs font-medium text-gray-500">프롬프트 목록 (줄바꿈으로 구분)</label>
+            {directPromptCount > 0 && (
+              <span className="text-xs font-semibold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">{directPromptCount}개</span>
+            )}
           </div>
-        ) : (
-          <div className="grid grid-cols-2 gap-4">
-            <label className="space-y-2">
-              <span className="text-black/60 text-sm font-mono font-bold uppercase tracking-widest">Variations</span>
-              <input
-                type="number" min={1} max={20} value={count}
-                onChange={(e) => setCount(Number(e.target.value))}
-                className="w-full bg-white text-black border-2 border-black px-4 py-3 text-sm font-mono font-bold focus:outline-none"
-              />
-            </label>
-            <label className="space-y-2">
-              <span className="text-black/60 text-sm font-mono font-bold uppercase tracking-widest">Concurrency</span>
-              <input
-                type="number" min={1} max={5} value={concurrency}
-                onChange={(e) => setConcurrency(Number(e.target.value))}
-                className="w-full bg-white text-black border-2 border-black px-4 py-3 text-sm font-mono font-bold focus:outline-none"
-              />
-            </label>
-          </div>
-        )}
-
-        {mode === 'direct' && (
-          <label className="flex items-center gap-4">
-            <span className="text-black/60 text-sm font-mono font-bold uppercase tracking-widest">동시 생성</span>
+          <textarea
+            value={promptText}
+            onChange={(e) => setPromptText(e.target.value)}
+            placeholder={`001 Medium shot, a Korean boy...\n003 Wide shot, bright full moon...\n005 Close up, servant face...`}
+            rows={8}
+            className="w-full bg-gray-50 text-gray-800 border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none placeholder-gray-300"
+          />
+        </div>
+      ) : (
+        <div className="space-y-3">
+          <label className="block">
+            <span className="text-xs font-medium text-gray-500 mb-1.5 block">변형 수</span>
             <input
-              type="number" min={1} max={5} value={concurrency}
-              onChange={(e) => setConcurrency(Number(e.target.value))}
-              className="w-20 bg-white text-black border-2 border-black px-3 py-2 text-sm font-mono font-bold focus:outline-none"
+              type="number" min={1} max={20} value={count}
+              onChange={(e) => setCount(Number(e.target.value))}
+              className="w-full bg-gray-50 text-gray-800 border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
             />
           </label>
-        )}
+        </div>
+      )}
 
-        {error && <p className="text-black font-mono font-bold text-sm">{error}</p>}
-
-        <button
-          onClick={submitBatch}
-          disabled={loading || (mode === 'direct' && directPromptCount === 0)}
-          className="w-full py-4 border-2 border-black font-mono font-bold text-base text-black transition-all
-            hover:bg-black hover:text-white uppercase tracking-widest
-            disabled:opacity-30 disabled:cursor-not-allowed"
-        >
-          {loading ? '시작 중...' : mode === 'direct' ? `${directPromptCount}개 프롬프트 생성` : `${count}개 배치 실행`}
-        </button>
+      <div className="flex items-center gap-3">
+        <Settings className="w-4 h-4 text-gray-400 flex-shrink-0" />
+        <label className="flex items-center gap-2 flex-1">
+          <span className="text-xs font-medium text-gray-500 whitespace-nowrap">동시 생성</span>
+          <input
+            type="number" min={1} max={5} value={concurrency}
+            onChange={(e) => setConcurrency(Number(e.target.value))}
+            className="w-20 bg-gray-50 text-gray-800 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+          />
+        </label>
       </div>
-      <BatchQueue />
+
+      {error && (
+        <div className="flex items-center gap-2 bg-red-50 text-red-600 text-sm rounded-lg px-3 py-2.5">
+          <AlertCircle className="w-4 h-4 flex-shrink-0" />
+          {error}
+        </div>
+      )}
+
+      <button
+        onClick={submitBatch}
+        disabled={loading || (mode === 'direct' && directPromptCount === 0)}
+        className="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold py-2.5 rounded-xl text-sm transition-colors shadow-sm"
+      >
+        <Play className="w-4 h-4" />
+        {loading ? '시작 중...' : mode === 'direct' ? `${directPromptCount}개 프롬프트 생성` : `${count}개 배치 실행`}
+      </button>
     </div>
   )
 }
