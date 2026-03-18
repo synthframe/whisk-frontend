@@ -5,7 +5,7 @@ import { useGenerateStore } from '../../store/generateStore'
 import { useBatchStore } from '../../store/batchStore'
 import { createBatch } from '../../api/batch'
 import { RATIO_DIMENSIONS } from '../../types'
-import type { BatchJobInput, BatchJobResult, SlotType } from '../../types'
+import type { BatchJobInput, BatchJobResult } from '../../types'
 
 type Mode = 'slot' | 'direct'
 
@@ -112,38 +112,11 @@ export function BatchPanel() {
   const charCount = promptText.length
   const lineCount = promptText.split('\n').filter((l) => l.trim()).length
 
-  const slotLabels: Record<SlotType, string> = { subject: '주제', scene: '배경', style: '스타일' }
-  const slotDots: Record<SlotType, string> = { subject: 'bg-blue-500', scene: 'bg-emerald-500', style: 'bg-violet-500' }
-
   return (
     <div className="bg-[#141418] rounded-2xl border border-white/[0.08] p-5 space-y-5">
       <div>
         <h2 className="text-sm font-semibold text-slate-100 mb-1">배치 생성</h2>
         <p className="text-xs text-slate-500 mb-4">여러 이미지를 한 번에 생성합니다</p>
-
-        {/* Active Slots Section */}
-        <div className="bg-[#1c1c23] rounded-xl border border-white/[0.06] p-3 mb-4">
-          <p className="text-xs font-medium text-slate-500 mb-2.5">모든 작업에 적용되는 슬롯</p>
-          <div className="flex gap-2">
-            {(['subject', 'scene', 'style'] as SlotType[]).map(type => {
-              const slot = slots[type]
-              return (
-                <div key={type} className="flex-1 flex flex-col items-center gap-1">
-                  <div className="w-full aspect-square rounded-lg overflow-hidden bg-[#141418] border border-white/[0.06] flex items-center justify-center">
-                    {slot.preview ? (
-                      <img src={slot.preview} className="w-full h-full object-cover" alt={slotLabels[type]} />
-                    ) : slot.prompt ? (
-                      <p className="text-[9px] text-slate-600 text-center p-1 leading-tight line-clamp-3">{slot.prompt}</p>
-                    ) : (
-                      <div className={`w-1.5 h-1.5 rounded-full ${slotDots[type]} opacity-30`} />
-                    )}
-                  </div>
-                  <span className="text-[10px] text-slate-600">{slotLabels[type]}</span>
-                </div>
-              )
-            })}
-          </div>
-        </div>
 
         <div className="flex gap-2">
           <button

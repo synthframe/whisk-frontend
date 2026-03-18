@@ -71,24 +71,30 @@ export default function App() {
         )}
 
         {mode === 'batch' && (
-          <div className="flex flex-col lg:grid lg:grid-cols-[360px_1fr] gap-8">
-            <div>
-              <BatchPanel />
-            </div>
-            <div>
-              {jobs.length > 0 ? (
-                <BatchQueue />
-              ) : (
-                <div className="h-64 rounded-2xl bg-[#141418] border border-white/[0.08] flex flex-col items-center justify-center gap-3">
-                  <div className="w-12 h-12 rounded-xl bg-[#1c1c23] border border-white/[0.06] flex items-center justify-center">
-                    <Layers className="w-6 h-6 text-slate-700" />
+          <div className="space-y-6">
+            {/* Slots — editable, same as single mode */}
+            <SlotGrid />
+
+            {/* Batch controls + queue */}
+            <div className="flex flex-col lg:grid lg:grid-cols-[360px_1fr] gap-6">
+              <div>
+                <BatchPanel />
+              </div>
+              <div>
+                {jobs.length > 0 ? (
+                  <BatchQueue />
+                ) : (
+                  <div className="h-64 rounded-2xl bg-[#141418] border border-white/[0.08] flex flex-col items-center justify-center gap-3">
+                    <div className="w-12 h-12 rounded-xl bg-[#1c1c23] border border-white/[0.06] flex items-center justify-center">
+                      <Layers className="w-6 h-6 text-slate-700" />
+                    </div>
+                    <div className="text-center">
+                      <p className="text-sm font-medium text-slate-500">배치 작업이 여기에 표시됩니다</p>
+                      <p className="text-xs text-slate-600 mt-1">좌측에서 배치를 시작하세요</p>
+                    </div>
                   </div>
-                  <div className="text-center">
-                    <p className="text-sm font-medium text-slate-500">배치 작업이 여기에 표시됩니다</p>
-                    <p className="text-xs text-slate-600 mt-1">좌측에서 배치를 시작하세요</p>
-                  </div>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           </div>
         )}
