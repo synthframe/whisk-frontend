@@ -188,9 +188,9 @@ export function GalleryPanel() {
     setError(null)
     try {
       const data = await getImages(p, PAGE_SIZE)
-      setImages(data.images)
-      setTotal(data.total)
-      setPage(data.page)
+      setImages(data.images ?? [])
+      setTotal(data.total ?? 0)
+      setPage(data.page ?? 1)
     } catch {
       setError('이미지를 불러오는데 실패했습니다')
     } finally {
