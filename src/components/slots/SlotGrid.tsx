@@ -6,9 +6,9 @@ const SLOTS: SlotType[] = ['subject', 'scene', 'style']
 
 export function SlotGrid() {
   const [modes, setModes] = useState<Record<SlotType, 'image' | 'text'>>({
-    subject: 'image',
-    scene: 'image',
-    style: 'image',
+    subject: 'text',
+    scene: 'text',
+    style: 'text',
   })
 
   function setMode(type: SlotType, mode: 'image' | 'text') {
