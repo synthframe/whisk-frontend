@@ -60,19 +60,19 @@ function BatchQueueItem({ batchId }: Props) {
   return (
     <div className="bg-[#141418] rounded-2xl border border-white/[0.08] p-4 space-y-4">
       <div className="flex items-center justify-between">
-        <span className="text-xs text-slate-600 font-mono">{batchId.slice(0, 8)}...</span>
+        <span className="text-sm text-slate-500 font-mono">{batchId.slice(0, 8)}...</span>
         <div className="flex items-center gap-2">
           {job.status === 'completed' && completedUrls.length > 0 && (
             <button
               onClick={handleDownloadAll}
               disabled={downloading}
-              className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg bg-[#1c1c23] border border-white/[0.08] text-slate-400 hover:border-violet-500/40 hover:text-slate-200 transition-colors disabled:opacity-40 font-medium"
+              className="flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-lg bg-[#1c1c23] border border-white/[0.08] text-slate-300 hover:border-violet-500/40 hover:text-white transition-colors disabled:opacity-40 font-semibold"
             >
               <Archive className="w-3.5 h-3.5" />
               {downloading ? '...' : `ZIP (${completedUrls.length})`}
             </button>
           )}
-          <span className={`text-xs font-medium px-2.5 py-1 rounded-lg border ${statusCls}`}>
+          <span className={`text-sm font-semibold px-2.5 py-1 rounded-lg border ${statusCls}`}>
             {job.status}
           </span>
         </div>

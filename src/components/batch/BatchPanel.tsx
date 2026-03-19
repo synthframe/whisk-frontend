@@ -115,8 +115,8 @@ export function BatchPanel() {
   return (
     <div className="bg-[#141418] rounded-2xl border border-white/[0.08] p-5 space-y-5">
       <div>
-        <h2 className="text-sm font-semibold text-slate-100 mb-1">배치 생성</h2>
-        <p className="text-xs text-slate-500 mb-4">여러 이미지를 한 번에 생성합니다</p>
+        <h2 className="text-base font-bold text-slate-100 mb-1">배치 생성</h2>
+        <p className="text-sm text-slate-400 mb-4">여러 이미지를 한 번에 생성합니다</p>
 
         <div className="flex gap-2">
           <button
@@ -149,28 +149,28 @@ export function BatchPanel() {
       {mode === 'direct' ? (
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <label className="text-xs font-semibold text-slate-400">프롬프트 목록</label>
-            <div className="flex items-center gap-2 text-xs text-slate-600">
+            <label className="text-sm font-bold text-slate-300">프롬프트 목록</label>
+            <div className="flex items-center gap-2 text-sm text-slate-500">
               <span>{charCount}자</span>
               {lineCount > 0 && (
                 <span className="font-semibold text-violet-400 bg-violet-500/10 px-2 py-0.5 rounded-md">{lineCount}줄</span>
               )}
             </div>
           </div>
-          <p className="text-xs text-slate-600">줄바꿈으로 구분, 앞 숫자는 무시됩니다</p>
+          <p className="text-sm text-slate-500">줄바꿈으로 구분, 앞 숫자는 무시됩니다</p>
           <textarea
             value={promptText}
             onChange={(e) => setPromptText(e.target.value)}
             placeholder={`001 Medium shot, a Korean boy...\n003 Wide shot, bright full moon...\n005 Close up, servant face...`}
             rows={8}
-            className="w-full bg-[#1c1c23] text-slate-200 border border-white/[0.06] rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-violet-500/50 resize-none placeholder-slate-700 leading-relaxed transition-colors"
+            className="w-full bg-[#1c1c23] text-slate-100 border border-white/[0.06] rounded-xl px-3 py-2.5 text-base focus:outline-none focus:border-violet-500/50 resize-none placeholder-slate-500 leading-relaxed transition-colors"
           />
         </div>
       ) : (
         <div className="space-y-3">
           <div>
-            <label className="block text-xs font-semibold text-slate-400 mb-2">변형 수</label>
-            <p className="text-xs text-slate-600 mb-3">현재 슬롯 설정으로 N번 생성합니다</p>
+            <label className="block text-sm font-bold text-slate-300 mb-2">변형 수</label>
+            <p className="text-sm text-slate-500 mb-3">현재 슬롯 설정으로 N번 생성합니다</p>
             <Stepper value={count} min={1} max={20} onChange={setCount} />
           </div>
         </div>
@@ -181,8 +181,8 @@ export function BatchPanel() {
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-xs font-semibold text-slate-400">동시 생성 수</p>
-            <p className="text-xs text-slate-600 mt-0.5">최대 5개까지 동시 실행</p>
+            <p className="text-sm font-bold text-slate-300">동시 생성 수</p>
+            <p className="text-sm text-slate-500 mt-0.5">최대 5개까지 동시 실행</p>
           </div>
           <Stepper value={concurrency} min={1} max={5} onChange={setConcurrency} />
         </div>
@@ -205,7 +205,7 @@ export function BatchPanel() {
       <button
         onClick={submitBatch}
         disabled={loading || (mode === 'direct' && directPromptCount === 0)}
-        className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-violet-600 to-purple-500 hover:from-violet-500 hover:to-purple-400 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl text-sm transition-all shadow-lg shadow-violet-900/30"
+        className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-violet-600 to-purple-500 hover:from-violet-500 hover:to-purple-400 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-4 rounded-xl text-base transition-all shadow-lg shadow-violet-900/30"
       >
         <Play className="w-4 h-4" />
         {loading

@@ -12,7 +12,7 @@ export function BatchJobRow({ job, index }: Props) {
 
   return (
     <div className="flex items-center gap-3 py-2.5 border-b border-white/[0.05] last:border-0">
-      <span className="text-xs text-slate-600 w-5 text-right font-medium tabular-nums">{index + 1}</span>
+      <span className="text-sm text-slate-500 w-5 text-right font-semibold tabular-nums">{index + 1}</span>
       <StatusIcon status={status} />
       {job.image_url ? (
         <a href={`${outputBaseURL}${job.image_url}?t=${Date.now()}`} target="_blank" rel="noopener noreferrer" className="group">
@@ -29,7 +29,7 @@ export function BatchJobRow({ job, index }: Props) {
       )}
       <div className="flex-1 min-w-0">
         <StatusBadge status={status} />
-        {job.error && <p className="text-xs text-slate-600 mt-0.5 truncate">{job.error}</p>}
+        {job.error && <p className="text-xs text-slate-500 mt-0.5 truncate">{job.error}</p>}
       </div>
       {job.image_url && (
         <a href={`${outputBaseURL}${job.image_url}`} target="_blank" rel="noopener noreferrer" className="text-slate-600 hover:text-violet-400 transition-colors">
@@ -56,7 +56,7 @@ function StatusBadge({ status }: { status: string }) {
     status === 'failed' ? '실패' : '대기 중'
 
   return (
-    <span className={`inline-block text-xs font-medium px-2 py-0.5 rounded-md border ${cls}`}>
+    <span className={`inline-block text-sm font-semibold px-2 py-0.5 rounded-md border ${cls}`}>
       {label}
     </span>
   )

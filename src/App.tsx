@@ -18,11 +18,11 @@ const RATIOS: AspectRatio[] = ['1:1', '16:9', '9:16', '4:3', '3:4']
 function SectionLabel({ step, label }: { step: number; label: string }) {
   return (
     <div className="flex items-center gap-3 mb-4">
-      <div className="w-6 h-6 rounded-lg bg-violet-600/20 border border-violet-500/30 flex items-center justify-center flex-shrink-0">
-        <span className="text-xs font-bold text-violet-400">{step}</span>
+      <div className="w-7 h-7 rounded-lg bg-violet-600/25 border border-violet-500/40 flex items-center justify-center flex-shrink-0 shadow-sm shadow-violet-900/30">
+        <span className="text-sm font-black text-violet-300">{step}</span>
       </div>
-      <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest">{label}</p>
-      <div className="flex-1 h-px bg-white/[0.05]" />
+      <p className="text-sm font-bold text-slate-300 tracking-wide">{label}</p>
+      <div className="flex-1 h-px bg-white/[0.07]" />
     </div>
   )
 }
@@ -53,11 +53,11 @@ export default function App() {
   const styleRatioCard = (
     <div className="bg-[#141418] rounded-2xl border border-white/[0.07] overflow-hidden">
       <div className="p-6 border-b border-white/[0.05]">
-        <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-4">스타일 프리셋</p>
+        <p className="text-sm font-bold text-slate-300 mb-4">스타일 프리셋</p>
         <StylePresets />
       </div>
       <div className="p-6">
-        <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-4">이미지 비율</p>
+        <p className="text-sm font-bold text-slate-300 mb-4">이미지 비율</p>
         {ratioButtons}
       </div>
     </div>
@@ -78,16 +78,16 @@ export default function App() {
                 <SectionLabel step={1} label="프롬프트" />
                 <div className="bg-[#141418] rounded-2xl border border-white/[0.07] overflow-hidden hover:border-white/[0.12] transition-colors">
                   <div className="flex items-center gap-3 px-6 py-4 border-b border-white/[0.05]">
-                    <PenLine className="w-4 h-4 text-slate-500" />
-                    <p className="text-sm font-semibold text-slate-300">이미지 설명</p>
-                    <span className="ml-auto text-xs text-slate-600">선택사항 · 아래 슬롯과 조합됩니다</span>
+                    <PenLine className="w-4 h-4 text-violet-400" />
+                    <p className="text-base font-bold text-slate-200">이미지 설명</p>
+                    <span className="ml-auto text-xs text-slate-500">선택사항 · 아래 슬롯과 조합됩니다</span>
                   </div>
                   <div className="relative p-4">
                     <textarea
                       value={mainPrompt}
                       onChange={(e) => setMainPrompt(e.target.value)}
                       placeholder="원하는 이미지를 자유롭게 설명하세요&#10;예: a cinematic close-up of a Korean girl in a rainy city street, neon lights reflecting on wet pavement..."
-                      className="w-full h-36 resize-none bg-transparent text-sm text-slate-200 placeholder-slate-700 focus:outline-none leading-relaxed px-2 py-1"
+                      className="w-full h-36 resize-none bg-transparent text-base text-slate-100 placeholder-slate-600 focus:outline-none leading-relaxed px-2 py-1"
                     />
                     {mainPrompt.length > 0 && (
                       <div className="absolute bottom-5 right-6 flex items-center gap-2">

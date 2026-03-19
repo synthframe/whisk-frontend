@@ -9,9 +9,9 @@ export function BatchProgress({ completed, failed, total }: Props) {
 
   return (
     <div className="space-y-1.5">
-      <div className="flex justify-between text-xs text-slate-500">
+      <div className="flex justify-between text-sm text-slate-400">
         <span>{completed} 완료 · {failed} 실패</span>
-        <span className="font-medium text-slate-400">{pct}%</span>
+        <span className="font-semibold text-slate-300">{pct}%</span>
       </div>
       <div className="h-1.5 bg-white/[0.06] rounded-full overflow-hidden">
         <div className="h-full flex">

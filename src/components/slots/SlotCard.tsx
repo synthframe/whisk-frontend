@@ -124,8 +124,8 @@ export function SlotCard({ type, inputMode, onModeChange }: Props) {
                     <Upload className="w-6 h-6 text-slate-300" />
                   </div>
                   <div className="text-center">
-                    <p className="text-sm text-slate-400 font-medium">드래그하거나 클릭</p>
-                    <p className="text-xs text-slate-700 mt-1">PNG · JPG · WEBP</p>
+                    <p className="text-sm text-slate-300 font-semibold">드래그하거나 클릭</p>
+                    <p className="text-xs text-slate-500 mt-1">PNG · JPG · WEBP</p>
                   </div>
                 </div>
               )}
@@ -158,13 +158,13 @@ export function SlotCard({ type, inputMode, onModeChange }: Props) {
               value={slot.prompt}
               onChange={e => useSlotStore.getState().setSlot(type, { prompt: e.target.value })}
               placeholder={cfg.placeholder}
-              className={`w-full h-56 resize-none rounded-xl bg-[#0f0f13] border border-white/[0.06] text-base p-4 pb-10 text-slate-200 placeholder-slate-600 focus:outline-none ${cfg.focus} transition-colors leading-relaxed`}
+              className={`w-full h-56 resize-none rounded-xl bg-[#0f0f13] border border-white/[0.08] text-base p-4 pb-10 text-slate-100 placeholder-slate-500 focus:outline-none ${cfg.focus} transition-colors leading-relaxed`}
             />
             <div className="absolute bottom-3.5 left-4 right-4 flex items-center justify-between">
-              <span className="text-[11px] text-slate-700">{cfg.desc}</span>
+              <span className="text-xs text-slate-500">{cfg.desc}</span>
               <div className="flex items-center gap-2">
                 {slot.prompt.length > 0 && (
-                  <span className={`text-[11px] tabular-nums ${slot.prompt.length > 300 ? 'text-amber-500' : 'text-slate-700'}`}>
+                  <span className={`text-xs tabular-nums ${slot.prompt.length > 300 ? 'text-amber-400' : 'text-slate-500'}`}>
                     {slot.prompt.length}자
                   </span>
                 )}
