@@ -4,34 +4,31 @@ import { useSlotStore } from '../../store/slotStore'
 import { useGenerate } from '../../hooks/useGenerate'
 
 export function GenerateButton() {
-  const { generating } = useGenerateStore()
+  const { generating, mainPrompt } = useGenerateStore()
   const slots = useSlotStore(s => s.slots)
   const { generate } = useGenerate()
 
-  const hasAnyPrompt = slots.subject.prompt || slots.scene.prompt || slots.style.prompt
+  const hasContent = mainPrompt.trim() || slots.subject.prompt || slots.scene.prompt || slots.style.prompt
 
   return (
     <button
       onClick={generate}
       disabled={generating}
-      title={!hasAnyPrompt ? '슬롯에 내용을 입력하세요' : undefined}
-      className={`w-full flex items-center justify-center gap-2.5 text-white font-semibold py-3.5 rounded-xl text-sm transition-all shadow-lg ${
+      className={`w-full flex items-center justify-center gap-2.5 text-white font-semibold py-4 rounded-xl text-base transition-all ${
         generating
           ? 'bg-violet-700/60 cursor-not-allowed shadow-none'
-          : hasAnyPrompt
-            ? 'bg-gradient-to-r from-violet-600 to-purple-500 hover:from-violet-500 hover:to-purple-400 shadow-violet-900/40 hover:shadow-violet-900/60 active:scale-[0.99]'
-            : 'bg-gradient-to-r from-violet-600/60 to-purple-500/60 cursor-not-allowed shadow-none'
+          : 'bg-gradient-to-r from-violet-600 to-purple-500 hover:from-violet-500 hover:to-purple-400 shadow-lg shadow-violet-900/40 hover:shadow-violet-900/60 active:scale-[0.99]'
       }`}
     >
       {generating ? (
         <>
           <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-          생성 중...
+          이미지 생성 중...
         </>
       ) : (
         <>
-          <Wand2 className="w-4 h-4" />
-          이미지 생성
+          <Wand2 className="w-5 h-5" />
+          {hasContent ? '이미지 생성' : '프롬프트를 입력하세요'}
         </>
       )}
     </button>

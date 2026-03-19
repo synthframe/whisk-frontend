@@ -10,16 +10,10 @@ import { GalleryPanel } from './components/gallery/GalleryPanel'
 import { ToastContainer } from './components/shared/Toast'
 import { useGenerateStore } from './store/generateStore'
 import { useBatchStore } from './store/batchStore'
-import { Layers } from 'lucide-react'
+import { Layers, PenLine } from 'lucide-react'
 import type { AspectRatio } from './types'
 
-const RATIOS: { value: AspectRatio; label: string; desc: string }[] = [
-  { value: '1:1', label: '1:1', desc: '정사각형' },
-  { value: '16:9', label: '16:9', desc: '와이드' },
-  { value: '9:16', label: '9:16', desc: '세로' },
-  { value: '4:3', label: '4:3', desc: '일반' },
-  { value: '3:4', label: '3:4', desc: '세로형' },
-]
+const RATIOS: AspectRatio[] = ['1:1', '16:9', '9:16', '4:3', '3:4']
 
 function SectionLabel({ step, label }: { step: number; label: string }) {
   return (
@@ -35,24 +29,37 @@ function SectionLabel({ step, label }: { step: number; label: string }) {
 
 export default function App() {
   const [mode, setMode] = useState<'single' | 'batch' | 'gallery'>('single')
-  const { selectedRatio, setRatio } = useGenerateStore()
+  const { selectedRatio, setRatio, mainPrompt, setMainPrompt } = useGenerateStore()
   const { jobs } = useBatchStore()
 
   const ratioButtons = (
-    <div className="flex flex-wrap gap-1.5">
-      {RATIOS.map(({ value, label }) => (
+    <div className="flex flex-wrap gap-2">
+      {RATIOS.map((r) => (
         <button
-          key={value}
-          onClick={() => setRatio(value)}
-          className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${
-            selectedRatio === value
+          key={r}
+          onClick={() => setRatio(r)}
+          className={`px-3.5 py-2 rounded-xl text-xs font-semibold border transition-all ${
+            selectedRatio === r
               ? 'bg-violet-600/20 text-violet-300 border-violet-500/50 shadow-sm shadow-violet-900/20'
               : 'bg-transparent text-slate-500 border-white/[0.08] hover:border-white/[0.18] hover:text-slate-300 hover:bg-white/[0.03]'
           }`}
         >
-          {label}
+          {r}
         </button>
       ))}
+    </div>
+  )
+
+  const styleRatioCard = (
+    <div className="bg-[#141418] rounded-2xl border border-white/[0.07] overflow-hidden">
+      <div className="p-5 border-b border-white/[0.05]">
+        <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-3">스타일 프리셋</p>
+        <StylePresets />
+      </div>
+      <div className="p-5">
+        <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-3">이미지 비율</p>
+        {ratioButtons}
+      </div>
     </div>
   )
 
@@ -60,33 +67,60 @@ export default function App() {
     <div className="min-h-screen bg-[#0c0c0f]">
       <Navbar mode={mode} onModeChange={setMode} />
 
-      <main className="max-w-6xl mx-auto px-4 md:px-6 py-6">
+      <main className="max-w-6xl mx-auto px-4 md:px-6 py-8">
         {mode === 'single' && (
-          <div className="flex flex-col lg:grid lg:grid-cols-[1fr_400px] gap-6">
+          <div className="flex flex-col lg:grid lg:grid-cols-[1fr_420px] gap-7">
             {/* Left: input flow */}
-            <div className="space-y-5">
-              <div>
-                <SectionLabel step={1} label="슬롯 설정" />
-                <SlotGrid />
-              </div>
+            <div className="space-y-6">
 
-              {/* Controls: style + ratio */}
+              {/* 1. 프롬프트 직접 입력 */}
               <div>
-                <SectionLabel step={2} label="스타일 · 비율" />
-                <div className="bg-[#141418] rounded-2xl border border-white/[0.07] divide-y divide-white/[0.05]">
-                  <div className="p-4">
-                    <p className="text-xs text-slate-600 mb-3">스타일 프리셋 (선택사항)</p>
-                    <StylePresets />
+                <SectionLabel step={1} label="프롬프트" />
+                <div className="bg-[#141418] rounded-2xl border border-white/[0.07] overflow-hidden hover:border-white/[0.12] transition-colors">
+                  <div className="flex items-center gap-2.5 px-5 py-3.5 border-b border-white/[0.05]">
+                    <PenLine className="w-4 h-4 text-slate-500" />
+                    <p className="text-sm font-semibold text-slate-300">이미지 설명</p>
+                    <span className="ml-auto text-xs text-slate-700">선택사항 · 아래 슬롯과 조합됩니다</span>
                   </div>
-                  <div className="p-4">
-                    <p className="text-xs text-slate-600 mb-3">이미지 비율</p>
-                    {ratioButtons}
+                  <div className="relative p-3">
+                    <textarea
+                      value={mainPrompt}
+                      onChange={(e) => setMainPrompt(e.target.value)}
+                      placeholder="원하는 이미지를 자유롭게 설명하세요&#10;예: a cinematic close-up of a Korean girl in a rainy city street, neon lights reflecting on wet pavement..."
+                      className="w-full h-32 resize-none bg-transparent text-sm text-slate-200 placeholder-slate-700 focus:outline-none leading-relaxed p-2"
+                    />
+                    {mainPrompt.length > 0 && (
+                      <div className="absolute bottom-4 right-5 flex items-center gap-2">
+                        <span className={`text-[10px] tabular-nums ${mainPrompt.length > 500 ? 'text-amber-500' : 'text-slate-700'}`}>
+                          {mainPrompt.length}자
+                        </span>
+                        <button
+                          onClick={() => setMainPrompt('')}
+                          className="text-[10px] text-slate-700 hover:text-slate-400 transition-colors px-1.5 py-0.5 rounded border border-white/[0.06] hover:border-white/[0.12]"
+                        >
+                          지우기
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
 
+              {/* 2. 슬롯 설정 */}
               <div>
-                <SectionLabel step={3} label="생성" />
+                <SectionLabel step={2} label="슬롯 설정" />
+                <SlotGrid />
+              </div>
+
+              {/* 3. 스타일 · 비율 */}
+              <div>
+                <SectionLabel step={3} label="스타일 · 비율" />
+                {styleRatioCard}
+              </div>
+
+              {/* 4. 생성 */}
+              <div>
+                <SectionLabel step={4} label="생성" />
                 <GenerateButton />
               </div>
             </div>
@@ -99,9 +133,9 @@ export default function App() {
         )}
 
         {mode === 'batch' && (
-          <div className="flex flex-col lg:grid lg:grid-cols-[1fr_360px] gap-6">
+          <div className="flex flex-col lg:grid lg:grid-cols-[1fr_380px] gap-7">
             {/* Left: slots + controls + queue */}
-            <div className="space-y-5">
+            <div className="space-y-6">
               <div>
                 <SectionLabel step={1} label="슬롯 설정" />
                 <SlotGrid />
@@ -109,16 +143,7 @@ export default function App() {
 
               <div>
                 <SectionLabel step={2} label="스타일 · 비율" />
-                <div className="bg-[#141418] rounded-2xl border border-white/[0.07] divide-y divide-white/[0.05]">
-                  <div className="p-4">
-                    <p className="text-xs text-slate-600 mb-3">스타일 프리셋 (선택사항)</p>
-                    <StylePresets />
-                  </div>
-                  <div className="p-4">
-                    <p className="text-xs text-slate-600 mb-3">이미지 비율</p>
-                    {ratioButtons}
-                  </div>
-                </div>
+                {styleRatioCard}
               </div>
 
               <div>
@@ -126,12 +151,12 @@ export default function App() {
                 {jobs.length > 0 ? (
                   <BatchQueue />
                 ) : (
-                  <div className="h-40 rounded-2xl bg-[#141418] border border-white/[0.07] flex flex-col items-center justify-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-[#0f0f13] border border-white/[0.06] flex items-center justify-center">
-                      <Layers className="w-5 h-5 text-slate-700" />
+                  <div className="h-44 rounded-2xl bg-[#141418] border border-white/[0.07] flex flex-col items-center justify-center gap-3">
+                    <div className="w-12 h-12 rounded-xl bg-[#0f0f13] border border-white/[0.06] flex items-center justify-center">
+                      <Layers className="w-6 h-6 text-slate-700" />
                     </div>
                     <div className="text-center">
-                      <p className="text-sm font-medium text-slate-500">배치 작업 결과가 여기에 표시됩니다</p>
+                      <p className="text-sm font-semibold text-slate-500">배치 결과가 여기에 표시됩니다</p>
                       <p className="text-xs text-slate-600 mt-0.5">우측 패널에서 배치를 시작하세요</p>
                     </div>
                   </div>

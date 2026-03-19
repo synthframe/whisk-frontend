@@ -6,7 +6,7 @@ import { RATIO_DIMENSIONS } from '../types'
 
 export function useGenerate() {
   const slots = useSlotStore((s) => s.slots)
-  const { selectedPreset, selectedRatio, setGenerating, setResult, setError, setJobId } = useGenerateStore()
+  const { selectedPreset, selectedRatio, mainPrompt, setGenerating, setResult, setError, setJobId } = useGenerateStore()
   const addToast = useToastStore((s) => s.addToast)
 
   const generate = async () => {
@@ -16,8 +16,10 @@ export function useGenerate() {
 
     try {
       const { width, height } = RATIO_DIMENSIONS[selectedRatio]
+      // Combine mainPrompt with slot subject (mainPrompt takes priority as the main description)
+      const subjectPrompt = [mainPrompt.trim(), slots.subject.prompt.trim()].filter(Boolean).join(', ')
       const res = await generateImage({
-        subject_prompt: slots.subject.prompt,
+        subject_prompt: subjectPrompt,
         scene_prompt: slots.scene.prompt,
         style_prompt: slots.style.prompt,
         style_preset: selectedPreset,
