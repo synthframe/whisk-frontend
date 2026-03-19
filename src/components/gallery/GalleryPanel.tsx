@@ -99,7 +99,7 @@ function ImageCard({ item, onRefine, onDownload, downloading }: {
 
       {/* Prompt info */}
       {(item.subject_prompt || item.scene_prompt) && (
-        <div className="px-2.5 py-2 space-y-0.5 border-t border-white/[0.04]">
+        <div className="px-3 py-2.5 space-y-1.5 border-t border-white/[0.05]">
           {item.subject_prompt && (
             <div className="flex items-start gap-1.5">
               <div className="w-1 h-1 rounded-full bg-blue-500 mt-1.5 flex-shrink-0" />
@@ -187,7 +187,7 @@ export function GalleryPanel() {
         )}
 
         {loading ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
             {Array.from({ length: 8 }).map((_, i) => (
               <SkeletonCard key={i} />
             ))}
@@ -203,7 +203,7 @@ export function GalleryPanel() {
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
             {images.map((item) => (
               <ImageCard
                 key={item.id}
