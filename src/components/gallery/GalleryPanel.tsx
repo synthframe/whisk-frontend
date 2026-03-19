@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
-import { RefreshCw, Download, GalleryHorizontal, ExternalLink, MessageSquare, Sparkles } from 'lucide-react'
+import { RefreshCw, Download, GalleryHorizontal, ExternalLink, MessageSquare, Sparkles, ChevronLeft, ChevronRight } from 'lucide-react'
 import { getImages } from '../../api/images'
 import type { ImageHistoryItem } from '../../api/images'
 import { outputBaseURL } from '../../api/client'
 import { ImageChatPanel } from './ImageChatPanel'
+
+const PAGE_SIZE = 20
 
 function SkeletonCard() {
   return (
@@ -49,7 +51,6 @@ function ImageCard({ item, onRefine, onDownload, downloading }: {
 }) {
   return (
     <div className="group flex flex-col rounded-xl overflow-hidden bg-[#141418] border border-white/[0.06] hover:border-white/[0.12] transition-all duration-200">
-      {/* Image */}
       <div className="relative aspect-square overflow-hidden">
         <img
           src={`${outputBaseURL}${item.url}`}
@@ -59,7 +60,6 @@ function ImageCard({ item, onRefine, onDownload, downloading }: {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
 
-        {/* Overlay actions */}
         <div className="absolute bottom-0 left-0 right-0 p-2 translate-y-full group-hover:translate-y-0 transition-transform duration-200">
           <div className="flex items-center gap-1.5">
             <button
@@ -89,7 +89,6 @@ function ImageCard({ item, onRefine, onDownload, downloading }: {
           </div>
         </div>
 
-        {/* Date badge */}
         <div className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity">
           <span className="text-[10px] text-white/80 bg-black/70 backdrop-blur-sm px-1.5 py-0.5 rounded-md">
             {formatDate(item.created_at)}
@@ -97,7 +96,6 @@ function ImageCard({ item, onRefine, onDownload, downloading }: {
         </div>
       </div>
 
-      {/* Prompt info */}
       {(item.subject_prompt || item.scene_prompt) && (
         <div className="px-3 py-2.5 space-y-1.5 border-t border-white/[0.05]">
           {item.subject_prompt && (
@@ -124,19 +122,75 @@ function ImageCard({ item, onRefine, onDownload, downloading }: {
   )
 }
 
+function Pagination({ page, total, pageSize, onPage }: { page: number; total: number; pageSize: number; onPage: (p: number) => void }) {
+  const totalPages = Math.ceil(total / pageSize)
+  if (totalPages <= 1) return null
+
+  const pages: (number | '...')[] = []
+  for (let i = 1; i <= totalPages; i++) {
+    if (i === 1 || i === totalPages || (i >= page - 1 && i <= page + 1)) {
+      pages.push(i)
+    } else if (pages[pages.length - 1] !== '...') {
+      pages.push('...')
+    }
+  }
+
+  return (
+    <div className="flex items-center justify-center gap-1.5">
+      <button
+        onClick={() => onPage(page - 1)}
+        disabled={page === 1}
+        className="w-8 h-8 flex items-center justify-center rounded-lg border border-white/[0.08] text-slate-400 hover:border-white/[0.2] hover:text-slate-200 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+      >
+        <ChevronLeft className="w-4 h-4" />
+      </button>
+
+      {pages.map((p, i) =>
+        p === '...' ? (
+          <span key={`dots-${i}`} className="w-8 text-center text-sm text-slate-600">…</span>
+        ) : (
+          <button
+            key={p}
+            onClick={() => onPage(p as number)}
+            className={`w-8 h-8 rounded-lg text-sm font-semibold transition-all border ${
+              p === page
+                ? 'bg-violet-600/20 text-violet-300 border-violet-500/50'
+                : 'border-white/[0.08] text-slate-500 hover:border-white/[0.2] hover:text-slate-200'
+            }`}
+          >
+            {p}
+          </button>
+        )
+      )}
+
+      <button
+        onClick={() => onPage(page + 1)}
+        disabled={page === totalPages}
+        className="w-8 h-8 flex items-center justify-center rounded-lg border border-white/[0.08] text-slate-400 hover:border-white/[0.2] hover:text-slate-200 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+      >
+        <ChevronRight className="w-4 h-4" />
+      </button>
+    </div>
+  )
+}
+
 export function GalleryPanel() {
   const [images, setImages] = useState<ImageHistoryItem[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [downloadingId, setDownloadingId] = useState<string | null>(null)
   const [chatImage, setChatImage] = useState<ImageHistoryItem | null>(null)
+  const [page, setPage] = useState(1)
+  const [total, setTotal] = useState(0)
 
-  const fetchImages = async () => {
+  const fetchImages = async (p = page) => {
     setLoading(true)
     setError(null)
     try {
-      const data = await getImages()
-      setImages(data)
+      const data = await getImages(p, PAGE_SIZE)
+      setImages(data.images)
+      setTotal(data.total)
+      setPage(data.page)
     } catch {
       setError('이미지를 불러오는데 실패했습니다')
     } finally {
@@ -145,8 +199,13 @@ export function GalleryPanel() {
   }
 
   useEffect(() => {
-    fetchImages()
+    fetchImages(1)
   }, [])
+
+  const handlePage = (p: number) => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+    fetchImages(p)
+  }
 
   const handleDownload = async (item: ImageHistoryItem) => {
     setDownloadingId(item.id)
@@ -159,6 +218,10 @@ export function GalleryPanel() {
     }
   }
 
+  const totalPages = Math.ceil(total / PAGE_SIZE)
+  const start = (page - 1) * PAGE_SIZE + 1
+  const end = Math.min(page * PAGE_SIZE, total)
+
   return (
     <>
       {chatImage && <ImageChatPanel image={chatImage} onClose={() => setChatImage(null)} />}
@@ -167,11 +230,15 @@ export function GalleryPanel() {
           <div>
             <h2 className="text-base font-semibold text-slate-100">이미지 갤러리</h2>
             <p className="text-xs text-slate-500 mt-0.5">
-              {loading ? '로딩 중...' : `${images.length}개의 이미지`}
+              {loading
+                ? '로딩 중...'
+                : total === 0
+                  ? '이미지 없음'
+                  : `전체 ${total}개 · ${start}–${end}번째`}
             </p>
           </div>
           <button
-            onClick={fetchImages}
+            onClick={() => fetchImages(page)}
             disabled={loading}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-transparent border border-white/[0.08] text-sm text-slate-400 hover:border-white/[0.18] hover:text-slate-200 transition-colors disabled:opacity-40"
           >
@@ -188,7 +255,7 @@ export function GalleryPanel() {
 
         {loading ? (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-            {Array.from({ length: 8 }).map((_, i) => (
+            {Array.from({ length: PAGE_SIZE }).map((_, i) => (
               <SkeletonCard key={i} />
             ))}
           </div>
@@ -216,7 +283,12 @@ export function GalleryPanel() {
           </div>
         )}
 
-        {/* Refine panel hint */}
+        {!loading && totalPages > 1 && (
+          <div className="pt-2">
+            <Pagination page={page} total={total} pageSize={PAGE_SIZE} onPage={handlePage} />
+          </div>
+        )}
+
         {!loading && images.length > 0 && (
           <div className="flex items-center justify-center gap-2 py-2">
             <MessageSquare className="w-3.5 h-3.5 text-slate-700" />

@@ -12,7 +12,15 @@ export interface ImageHistoryItem {
   created_at: string
 }
 
-export async function getImages(): Promise<ImageHistoryItem[]> {
-  const res = await client.get('/images')
+export interface ImagePage {
+  images: ImageHistoryItem[]
+  total: number
+  page: number
+  page_size: number
+  has_next: boolean
+}
+
+export async function getImages(page = 1, pageSize = 20): Promise<ImagePage> {
+  const res = await client.get('/images', { params: { page, page_size: pageSize } })
   return res.data
 }
