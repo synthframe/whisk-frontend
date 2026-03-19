@@ -134,34 +134,46 @@ export default function App() {
 
         {mode === 'batch' && (
           <div className="flex flex-col lg:grid lg:grid-cols-[1fr_420px] gap-8">
+            {/* Left: 슬롯 → 배치 설정 → 스타일/비율 */}
             <div className="space-y-8">
               <div>
                 <SectionLabel step={1} label="슬롯 설정" />
                 <SlotGrid />
               </div>
               <div>
-                <SectionLabel step={2} label="스타일 · 비율" />
-                {styleRatioCard}
+                <SectionLabel step={2} label="배치 생성 설정" />
+                <BatchPanel />
               </div>
               <div>
-                <SectionLabel step={3} label="배치 결과" />
+                <SectionLabel step={3} label="스타일 · 비율" />
+                {styleRatioCard}
+              </div>
+            </div>
+
+            {/* Right: 배치 결과 — sticky */}
+            <div className="lg:sticky lg:top-20 lg:self-start">
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-6 h-6 rounded-lg bg-violet-600/20 border border-violet-500/30 flex items-center justify-center flex-shrink-0">
+                    <Layers className="w-3.5 h-3.5 text-violet-400" />
+                  </div>
+                  <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest">배치 결과</p>
+                  <div className="flex-1 h-px bg-white/[0.05]" />
+                </div>
                 {jobs.length > 0 ? (
                   <BatchQueue />
                 ) : (
-                  <div className="h-48 rounded-2xl bg-[#141418] border border-white/[0.07] flex flex-col items-center justify-center gap-4">
+                  <div className="h-64 rounded-2xl bg-[#141418] border border-white/[0.07] flex flex-col items-center justify-center gap-4">
                     <div className="w-14 h-14 rounded-2xl bg-[#0f0f13] border border-white/[0.06] flex items-center justify-center">
                       <Layers className="w-7 h-7 text-slate-700" />
                     </div>
                     <div className="text-center">
                       <p className="text-sm font-semibold text-slate-500">배치 결과가 여기에 표시됩니다</p>
-                      <p className="text-xs text-slate-600 mt-1">우측 패널에서 배치를 시작하세요</p>
+                      <p className="text-xs text-slate-600 mt-1">배치를 실행하면 진행 상황이 표시됩니다</p>
                     </div>
                   </div>
                 )}
               </div>
-            </div>
-            <div className="lg:sticky lg:top-20 lg:self-start">
-              <BatchPanel />
             </div>
           </div>
         )}

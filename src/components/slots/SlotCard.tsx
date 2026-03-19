@@ -60,19 +60,16 @@ export function SlotCard({ type, inputMode, onModeChange }: Props) {
       hasContent ? 'border-white/[0.14]' : 'border-white/[0.07] hover:border-white/[0.12]'
     }`}>
       {/* Header */}
-      <div className="flex items-center justify-between px-5 py-4 border-b border-white/[0.05] bg-[#111115]">
-        <div className="flex items-center gap-3 min-w-0">
-          <div className={`w-3 h-3 rounded-full flex-shrink-0 ${cfg.accent}`} />
-          <div className="min-w-0">
-            <p className="text-base font-bold text-slate-100 leading-tight">{cfg.label}</p>
-            <p className="text-xs text-slate-500 mt-0.5">{cfg.desc}</p>
-          </div>
+      <div className="flex items-center justify-between px-4 py-3 border-b border-white/[0.05] bg-[#111115] gap-2">
+        <div className="flex items-center gap-2 flex-shrink-0">
+          <div className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ${cfg.accent}`} />
+          <p className="text-sm font-bold text-slate-100 whitespace-nowrap">{cfg.label}</p>
         </div>
         {/* Mode toggle */}
-        <div className="flex bg-[#0c0c0f] rounded-xl p-1 gap-1 flex-shrink-0 ml-3 border border-white/[0.05]">
+        <div className="flex bg-[#0c0c0f] rounded-xl p-0.5 gap-0.5 flex-shrink-0 border border-white/[0.05]">
           <button
             onClick={() => onModeChange('image')}
-            className={`flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold transition-all whitespace-nowrap ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap ${
               inputMode === 'image'
                 ? 'bg-white/[0.12] text-slate-100 shadow-sm'
                 : 'text-slate-600 hover:text-slate-300'
@@ -83,7 +80,7 @@ export function SlotCard({ type, inputMode, onModeChange }: Props) {
           </button>
           <button
             onClick={() => onModeChange('text')}
-            className={`flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold transition-all whitespace-nowrap ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap ${
               inputMode === 'text'
                 ? 'bg-white/[0.12] text-slate-100 shadow-sm'
                 : 'text-slate-600 hover:text-slate-300'
